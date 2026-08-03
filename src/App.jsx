@@ -1,12 +1,27 @@
+import { Navigate, Route, Routes } from "react-router";
+
+import DashboardLayout from "./components/layout/DashboardLayout";
+
+import ActivityPage from "./pages/ActivityPage";
+import DashboardPage from "./pages/DashboardPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import TasksPage from "./pages/TasksPage";
+
 function App() {
   return (
-    <main className="min-h-screen bg-slate-950 p-8 text-white">
-      <h1 className="text-3xl font-bold">DevBoard</h1>
+    <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <p className="mt-2 text-slate-400">
-        Project Management & Developer Productivity Dashboard
-      </p>
-    </main>
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="projects" element={<ProjectsPage />} />
+        <Route path="tasks" element={<TasksPage />} />
+        <Route path="activity" element={<ActivityPage />} />
+      </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 
