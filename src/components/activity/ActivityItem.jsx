@@ -1,0 +1,95 @@
+import {
+  PiCheckCircle,
+  PiFolderPlus,
+  PiListChecks,
+  PiPencilSimple,
+  PiPlusCircle,
+} from "react-icons/pi";
+
+const activityConfig = {
+  "task-created": {
+    icon: PiPlusCircle,
+    label: "Task created",
+  },
+
+  "task-completed": {
+    icon: PiCheckCircle,
+    label: "Task completed",
+  },
+
+  "task-updated": {
+    icon: PiListChecks,
+    label: "Task updated",
+  },
+
+  "project-created": {
+    icon: PiFolderPlus,
+    label: "Project created",
+  },
+
+  "project-updated": {
+    icon: PiPencilSimple,
+    label: "Project updated",
+  },
+};
+
+const fallbackConfig = {
+  icon: PiListChecks,
+  label: "Activity",
+};
+
+function ActivityItem({ activity, project, task, isLast = false }) {
+  const config = activityConfig[activity.type] ?? fallbackConfig;
+
+  const Icon = config.icon;
+
+  return (
+    <li className="relative flex gap-4">
+      {/* Timeline */}
+      <div className="relative flex shrink-0 flex-col items-center">
+        <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background">
+          <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+        </div>
+
+        {!isLast && (
+          <div
+            className="absolute bottom-0 top-9 w-px bg-border"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="min-w-0 flex-1 pb-7">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <p className="text-sm font-medium">{activity.message}</p>
+
+            {(project || task) && (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {project?.name}
+
+                {project && task && <span aria-hidden="true"> · </span>}
+
+                {task?.title}
+              </p>
+            )}
+          </div>
+
+          <time
+            dateTime={activity.timestamp}
+            className="shrink-0 text-xs text-muted-foreground"
+          >
+            {activity.timestamp}
+          </time>
+        </div>
+
+        <p className="mt-2 text-xs font-medium text-muted-foreground">
+          {config.label}
+        </p>
+      </div>
+    </li>
+  );
+}
+
+export default ActivityItem;
