@@ -1,7 +1,10 @@
 import { PiClockCounterClockwise } from "react-icons/pi";
+import { motion } from "motion/react";
 
 import EmptyState from "../ui/EmptyState";
 import ActivityItem from "./ActivityItem";
+
+import { staggerContainer } from "../../utils/motion";
 
 function ActivityList({ activities, projectMap, taskMap }) {
   if (activities.length === 0) {
@@ -15,7 +18,7 @@ function ActivityList({ activities, projectMap, taskMap }) {
   }
 
   return (
-    <ul>
+    <motion.ul variants={staggerContainer} initial="hidden" animate="visible">
       {activities.map((activity, index) => (
         <ActivityItem
           key={activity.id}
@@ -25,7 +28,7 @@ function ActivityList({ activities, projectMap, taskMap }) {
           isLast={index === activities.length - 1}
         />
       ))}
-    </ul>
+    </motion.ul>
   );
 }
 

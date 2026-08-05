@@ -14,6 +14,9 @@ import PageHeader from "../components/ui/PageHeader";
 
 import { projects } from "../data/projects";
 import { tasks } from "../data/tasks";
+import PageTransition from "../components/motion/PageTransition";
+import { motion } from "motion/react";
+import { staggerContainer } from "../utils/motion";
 
 function DashboardPage() {
   const totalProjects = projects.length;
@@ -82,42 +85,47 @@ function DashboardPage() {
   const projectMap = new Map(projects.map((project) => [project.id, project]));
 
   return (
-    <div>
-      <PageHeader
-        title="Dashboard"
-        description="Overview of your projects, tasks, and recent development activity."
-      />
+    <PageTransition>
+      <div>
+        <PageHeader
+          title="Dashboard"
+          description="Overview of your projects, tasks, and recent development activity."
+        />
 
-      {/* Metrics */}
-      <section
-        aria-label="Workspace metrics"
-        className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        {metrics.map((metric) => (
-          <MetricCard key={metric.label} {...metric} />
-        ))}
-      </section>
+        {/* Metrics */}
+        <motion.section
+          aria-label="Workspace metrics"
+          className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          {metrics.map((metric) => (
+            <MetricCard key={metric.label} {...metric} />
+          ))}
+        </motion.section>
 
-      {/* Charts */}
-      <section
-        aria-label="Project and task analytics"
-        className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)]"
-      >
-        <ProjectProgressChart projects={projects} />
+        {/* Charts */}
+        <section
+          aria-label="Project and task analytics"
+          className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)]"
+        >
+          <ProjectProgressChart projects={projects} />
 
-        <TaskDistributionChart data={taskDistribution} total={totalTasks} />
-      </section>
+          <TaskDistributionChart data={taskDistribution} total={totalTasks} />
+        </section>
 
-      {/* Summaries */}
-      <section
-        aria-label="Recent projects and upcoming tasks"
-        className="mt-6 grid gap-6 xl:grid-cols-2"
-      >
-        <RecentProjects projects={recentProjects} />
+        {/* Summaries */}
+        <section
+          aria-label="Recent projects and upcoming tasks"
+          className="mt-6 grid gap-6 xl:grid-cols-2"
+        >
+          <RecentProjects projects={recentProjects} />
 
-        <UpcomingTasks tasks={upcomingTasks} projectMap={projectMap} />
-      </section>
-    </div>
+          <UpcomingTasks tasks={upcomingTasks} projectMap={projectMap} />
+        </section>
+      </div>
+    </PageTransition>
   );
 }
 

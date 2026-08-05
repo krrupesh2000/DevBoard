@@ -1,4 +1,5 @@
 import ActivityList from "../components/activity/ActivityList";
+import PageTransition from "../components/motion/PageTransition";
 import Card from "../components/ui/Card";
 import PageHeader from "../components/ui/PageHeader";
 
@@ -16,30 +17,32 @@ function ActivityPage() {
   );
 
   return (
-    <div>
-      <PageHeader
-        title="Activity"
-        description="Track recent updates across your projects and tasks."
-      />
+    <PageTransition>
+      <div>
+        <PageHeader
+          title="Activity"
+          description="Track recent updates across your projects and tasks."
+        />
 
-      <div className="mt-8 max-w-4xl">
-        <Card className="p-5 sm:p-6">
-          <div className="mb-6">
-            <h2 className="text-base font-semibold">Recent Activity</h2>
+        <div className="mt-8 max-w-4xl">
+          <Card className="p-5 sm:p-6">
+            <div className="mb-6">
+              <h2 className="text-base font-semibold">Recent Activity</h2>
 
-            <p className="mt-1 text-sm text-muted-foreground">
-              Latest changes across your workspace.
-            </p>
-          </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Latest changes across your workspace.
+              </p>
+            </div>
 
-          <ActivityList
-            activities={sortedActivities}
-            projectMap={projectMap}
-            taskMap={taskMap}
-          />
-        </Card>
+            <ActivityList
+              activities={sortedActivities}
+              projectMap={projectMap}
+              taskMap={taskMap}
+            />
+          </Card>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
 

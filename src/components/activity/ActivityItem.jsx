@@ -6,6 +6,10 @@ import {
   PiPlusCircle,
 } from "react-icons/pi";
 
+import { formatDateTime } from "../../utils/date";
+import { motion } from "motion/react";
+import { fadeUp } from "../../utils/motion";
+
 const activityConfig = {
   "task-created": {
     icon: PiPlusCircle,
@@ -44,7 +48,7 @@ function ActivityItem({ activity, project, task, isLast = false }) {
   const Icon = config.icon;
 
   return (
-    <li className="relative flex gap-4">
+    <motion.li variants={fadeUp} className="relative flex gap-4">
       {/* Timeline */}
       <div className="relative flex shrink-0 flex-col items-center">
         <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background">
@@ -80,7 +84,7 @@ function ActivityItem({ activity, project, task, isLast = false }) {
             dateTime={activity.timestamp}
             className="shrink-0 text-xs text-muted-foreground"
           >
-            {activity.timestamp}
+            {formatDateTime(activity.timestamp)}
           </time>
         </div>
 
@@ -88,7 +92,7 @@ function ActivityItem({ activity, project, task, isLast = false }) {
           {config.label}
         </p>
       </div>
-    </li>
+    </motion.li>
   );
 }
 

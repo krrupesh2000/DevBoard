@@ -3,6 +3,8 @@ import { PiFolderOpen } from "react-icons/pi";
 import Button from "../ui/Button";
 import EmptyState from "../ui/EmptyState";
 import ProjectCard from "./ProjectCard";
+import { motion } from "motion/react";
+import { staggerContainer } from "../../utils/motion";
 
 function ProjectGrid({ projects, hasFilters, onClearFilters }) {
   if (projects.length === 0) {
@@ -27,11 +29,16 @@ function ProjectGrid({ projects, hasFilters, onClearFilters }) {
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+    >
       {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
-    </div>
+    </motion.div>
   );
 }
 

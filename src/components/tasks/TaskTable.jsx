@@ -1,33 +1,14 @@
-import { PiListChecks } from "react-icons/pi";
 
 import Card from "../ui/Card";
-import EmptyState from "../ui/EmptyState";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import StatusBadge from "../ui/StatusBadge";
+import { formatDate } from "../../utils/date";
+import TaskEmptyState from "./TaskEmptyState";
 
 function TaskTable({ tasks, projectMap, hasFilters, onClearFilters }) {
   if (tasks.length === 0) {
     return (
-      <EmptyState
-        icon={PiListChecks}
-        title={hasFilters ? "No matching tasks" : "No tasks yet"}
-        description={
-          hasFilters
-            ? "Try changing your search or task filters."
-            : "Tasks will appear here once they are created."
-        }
-        action={
-          hasFilters ? (
-            <button
-              type="button"
-              onClick={onClearFilters}
-              className="h-10 rounded-lg border border-border bg-secondary px-4 text-sm font-medium transition-colors hover:bg-muted"
-            >
-              Clear filters
-            </button>
-          ) : null
-        }
-      />
+      <TaskEmptyState hasFilters={hasFilters} onClearFilters={onClearFilters} />
     );
   }
 
@@ -106,7 +87,7 @@ function TaskTable({ tasks, projectMap, hasFilters, onClearFilters }) {
                       dateTime={task.dueDate}
                       className="text-sm text-muted-foreground"
                     >
-                      {task.dueDate}
+                      {formatDate(task.dueDate)}
                     </time>
                   </td>
                 </tr>

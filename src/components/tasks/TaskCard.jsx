@@ -1,6 +1,7 @@
 import Card from "../ui/Card";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import StatusBadge from "../ui/StatusBadge";
+import { formatDate } from "../../utils/date";
 
 function TaskCard({ task, project }) {
   return (
@@ -23,7 +24,7 @@ function TaskCard({ task, project }) {
         <PriorityIndicator priority={task.priority} />
 
         <time dateTime={task.dueDate} className="text-xs text-muted-foreground">
-          {task.dueDate}
+          {formatDate(task.dueDate)}
         </time>
       </div>
     </Card>

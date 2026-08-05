@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Card from "../ui/Card";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import StatusBadge from "../ui/StatusBadge";
+import { formatDate } from "../../utils/date";
 
 function UpcomingTasks({ tasks, projectMap }) {
   return (
@@ -49,9 +50,9 @@ function UpcomingTasks({ tasks, projectMap }) {
 
                 <time
                   dateTime={task.dueDate}
-                  className="text-xs text-muted-foreground"
+                  className="text-sm text-muted-foreground"
                 >
-                  {task.dueDate}
+                  {formatDate(task.dueDate)}
                 </time>
               </div>
             </div>

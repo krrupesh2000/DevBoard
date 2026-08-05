@@ -7,6 +7,7 @@ import PageHeader from "../components/ui/PageHeader";
 
 import { projects } from "../data/projects";
 import { tasks } from "../data/tasks";
+import PageTransition from "../components/motion/PageTransition";
 
 const priorityRank = {
   high: 3,
@@ -77,52 +78,54 @@ function TasksPage() {
   }
 
   return (
-    <div>
-      <PageHeader
-        title="Tasks"
-        description="Manage tasks, priorities, and deadlines across your projects."
-      />
-
-      <div className="mt-8">
-        <TaskToolbar
-          search={search}
-          onSearchChange={setSearch}
-          project={project}
-          onProjectChange={setProject}
-          status={status}
-          onStatusChange={setStatus}
-          priority={priority}
-          onPriorityChange={setPriority}
-          sort={sort}
-          onSortChange={setSort}
-          projects={projects}
+    <PageTransition>
+      <div>
+        <PageHeader
+          title="Tasks"
+          description="Manage tasks, priorities, and deadlines across your projects."
         />
-      </div>
 
-      <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-        {visibleTasks.length} {visibleTasks.length === 1 ? "task" : "tasks"}
-      </p>
-
-      <div className="mt-4">
-        <div className="xl:hidden">
-          <TaskList
-            tasks={visibleTasks}
-            projectMap={projectMap}
-            hasFilters={hasFilters}
-            onClearFilters={handleClearFilters}
+        <div className="mt-8">
+          <TaskToolbar
+            search={search}
+            onSearchChange={setSearch}
+            project={project}
+            onProjectChange={setProject}
+            status={status}
+            onStatusChange={setStatus}
+            priority={priority}
+            onPriorityChange={setPriority}
+            sort={sort}
+            onSortChange={setSort}
+            projects={projects}
           />
         </div>
 
-        <div className="hidden xl:block">
-          <TaskTable
-            tasks={visibleTasks}
-            projectMap={projectMap}
-            hasFilters={hasFilters}
-            onClearFilters={handleClearFilters}
-          />
+        <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
+          {visibleTasks.length} {visibleTasks.length === 1 ? "task" : "tasks"}
+        </p>
+
+        <div className="mt-4">
+          <div className="xl:hidden">
+            <TaskList
+              tasks={visibleTasks}
+              projectMap={projectMap}
+              hasFilters={hasFilters}
+              onClearFilters={handleClearFilters}
+            />
+          </div>
+
+          <div className="hidden xl:block">
+            <TaskTable
+              tasks={visibleTasks}
+              projectMap={projectMap}
+              hasFilters={hasFilters}
+              onClearFilters={handleClearFilters}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
 

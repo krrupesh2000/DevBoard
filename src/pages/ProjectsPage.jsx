@@ -5,6 +5,7 @@ import ProjectToolbar from "../components/projects/ProjectToolbar";
 import PageHeader from "../components/ui/PageHeader";
 
 import { projects } from "../data/projects";
+import PageTransition from "../components/motion/PageTransition";
 
 function ProjectsPage() {
   const [search, setSearch] = useState("");
@@ -52,36 +53,38 @@ function ProjectsPage() {
   }
 
   return (
-    <div>
-      <PageHeader
-        title="Projects"
-        description="Track progress and manage your development projects."
-      />
-
-      <div className="mt-8">
-        <ProjectToolbar
-          search={search}
-          onSearchChange={setSearch}
-          status={status}
-          onStatusChange={setStatus}
-          sort={sort}
-          onSortChange={setSort}
+    <PageTransition>
+      <div>
+        <PageHeader
+          title="Projects"
+          description="Track progress and manage your development projects."
         />
-      </div>
 
-      <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-        {visibleProjects.length}{" "}
-        {visibleProjects.length === 1 ? "project" : "projects"}
-      </p>
+        <div className="mt-8">
+          <ProjectToolbar
+            search={search}
+            onSearchChange={setSearch}
+            status={status}
+            onStatusChange={setStatus}
+            sort={sort}
+            onSortChange={setSort}
+          />
+        </div>
 
-      <div className="mt-4">
-        <ProjectGrid
-          projects={visibleProjects}
-          hasFilters={hasFilters}
-          onClearFilters={handleClearFilters}
-        />
+        <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
+          {visibleProjects.length}{" "}
+          {visibleProjects.length === 1 ? "project" : "projects"}
+        </p>
+
+        <div className="mt-4">
+          <ProjectGrid
+            projects={visibleProjects}
+            hasFilters={hasFilters}
+            onClearFilters={handleClearFilters}
+          />
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
 
