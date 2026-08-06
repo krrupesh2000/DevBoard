@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import {
   PiCheckCircle,
   PiFolder,
@@ -10,12 +11,11 @@ import ProjectProgressChart from "../components/dashboard/ProjectProgressChart";
 import RecentProjects from "../components/dashboard/RecentProjects";
 import TaskDistributionChart from "../components/dashboard/TaskDistributionChart";
 import UpcomingTasks from "../components/dashboard/UpcomingTasks";
+import PageTransition from "../components/motion/PageTransition";
 import PageHeader from "../components/ui/PageHeader";
 
 import { projects } from "../data/projects";
 import { tasks } from "../data/tasks";
-import PageTransition from "../components/motion/PageTransition";
-import { motion } from "motion/react";
 import { staggerContainer } from "../utils/motion";
 
 function DashboardPage() {

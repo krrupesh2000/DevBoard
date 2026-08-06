@@ -9,7 +9,6 @@ function ProjectCard({ project }) {
   const visibleTechnologies = project.technologies.slice(0, 3);
   const remainingTechnologies =
     project.technologies.length - visibleTechnologies.length;
-
   const shouldReduceMotion = useReducedMotion();  
 
   return (
