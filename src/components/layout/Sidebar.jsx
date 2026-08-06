@@ -1,5 +1,5 @@
 import { PiCode } from "react-icons/pi";
-
+import UserPanel from "./UserPanel";
 import SidebarNav from "./SidebarNav";
 
 function Sidebar() {
@@ -28,19 +28,7 @@ function Sidebar() {
       </div>
 
       {/* Profile */}
-      <div className="border-t border-border p-4">
-        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold">
-            RK
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium">Rupesh Kumar</p>
-
-            <p className="truncate text-xs text-muted-foreground">Developer</p>
-          </div>
-        </div>
-      </div>
+      <UserPanel />
     </aside>
   );
 }
