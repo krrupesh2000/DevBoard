@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
 import { fadeUp } from "../../utils/motion";
 import Card from "../ui/Card";
 import PriorityIndicator from "../ui/PriorityIndicator";
@@ -10,10 +10,12 @@ function ProjectCard({ project }) {
   const remainingTechnologies =
     project.technologies.length - visibleTechnologies.length;
 
+  const shouldReduceMotion = useReducedMotion();  
+
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -3 }}
+      whileHover={shouldReduceMotion ? undefined : { y: -3 }}
       transition={{ duration: 0.2 }}
       className="h-full"
     >
