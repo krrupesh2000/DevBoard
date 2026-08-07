@@ -1,5 +1,6 @@
 import SearchInput from "../ui/SearchInput";
 import Select from "../ui/Select";
+import Button from "../ui/Button";
 
 const statusOptions = [
   {
@@ -50,6 +51,7 @@ function ProjectToolbar({
   onStatusChange,
   sort,
   onSortChange,
+  onAddProject,
 }) {
   return (
     <div className="flex flex-col gap-3 lg:flex-row">
@@ -76,6 +78,8 @@ function ProjectToolbar({
           options={sortOptions}
           className="w-full sm:min-w-48"
         />
+
+        <Button onClick={onAddProject}>+ New Project</Button>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import TaskToolbar from "../components/tasks/TaskToolbar";
 import PageHeader from "../components/ui/PageHeader";
 
 import { projects } from "../data/projects";
-import { tasks } from "../data/tasks";
+import useAppData from "../hooks/useAppData";
 import PageTransition from "../components/motion/PageTransition";
 
 const priorityRank = {
@@ -16,6 +16,7 @@ const priorityRank = {
 };
 
 function TasksPage() {
+  const { tasks } = useAppData();
   const [search, setSearch] = useState("");
   const [project, setProject] = useState("all");
   const [status, setStatus] = useState("all");

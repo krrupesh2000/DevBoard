@@ -13,12 +13,12 @@ import TaskDistributionChart from "../components/dashboard/TaskDistributionChart
 import UpcomingTasks from "../components/dashboard/UpcomingTasks";
 import PageTransition from "../components/motion/PageTransition";
 import PageHeader from "../components/ui/PageHeader";
+import useAppData from "../hooks/useAppData";
 
-import { projects } from "../data/projects";
-import { tasks } from "../data/tasks";
 import { staggerContainer } from "../utils/motion";
 
 function DashboardPage() {
+  const { projects, tasks } = useAppData();
   const totalProjects = projects.length;
 
   const activeProjects = projects.filter(

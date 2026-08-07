@@ -1,16 +1,18 @@
-import { useState } from "react";
 
+import { useState } from "react";
 import ProjectGrid from "../components/projects/ProjectGrid";
 import ProjectToolbar from "../components/projects/ProjectToolbar";
 import PageHeader from "../components/ui/PageHeader";
-
-import { projects } from "../data/projects";
+import useAppData from "../hooks/useAppData";
 import PageTransition from "../components/motion/PageTransition";
+import AddProjectDialog from "../components/projects/dialogs/AddProjectDialog";
 
 function ProjectsPage() {
+  const { projects } = useAppData();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("updated-desc");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -68,6 +70,7 @@ function ProjectsPage() {
             onStatusChange={setStatus}
             sort={sort}
             onSortChange={setSort}
+            onAddProject={() => setIsAddDialogOpen(true)}
           />
         </div>
 
@@ -83,6 +86,10 @@ function ProjectsPage() {
             onClearFilters={handleClearFilters}
           />
         </div>
+        <AddProjectDialog
+          open={isAddDialogOpen}
+          onClose={() => setIsAddDialogOpen(false)}
+        />
       </div>
     </PageTransition>
   );

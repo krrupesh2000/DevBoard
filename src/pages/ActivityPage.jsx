@@ -2,12 +2,12 @@ import ActivityList from "../components/activity/ActivityList";
 import PageTransition from "../components/motion/PageTransition";
 import Card from "../components/ui/Card";
 import PageHeader from "../components/ui/PageHeader";
-
-import { activities } from "../data/activities";
+import useAppData from "../hooks/useAppData";
 import { projects } from "../data/projects";
 import { tasks } from "../data/tasks";
 
 function ActivityPage() {
+  const { activities } = useAppData();
   const projectMap = new Map(projects.map((project) => [project.id, project]));
 
   const taskMap = new Map(tasks.map((task) => [task.id, task]));

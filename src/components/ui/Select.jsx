@@ -1,8 +1,22 @@
-function Select({ value, onValueChange, options, ariaLabel, className = "" }) {
+function Select({
+  name,
+  value,
+  onChange,
+  onValueChange,
+  options,
+  ariaLabel,
+  className = "",
+}) {
+  function handleChange(event) {
+    onChange?.(event);
+    onValueChange?.(event.target.value);
+  }
+
   return (
     <select
+      name={name}
       value={value}
-      onChange={(event) => onValueChange(event.target.value)}
+      onChange={handleChange}
       aria-label={ariaLabel}
       className={[
         "h-10 rounded-lg border border-input bg-background px-3 text-sm text-foreground",
