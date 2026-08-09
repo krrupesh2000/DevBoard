@@ -6,13 +6,17 @@ import PageHeader from "../components/ui/PageHeader";
 import useAppData from "../hooks/useAppData";
 import PageTransition from "../components/motion/PageTransition";
 import AddProjectDialog from "../components/projects/dialogs/AddProjectDialog";
+import EditProjectDialog from "../components/projects/dialogs/EditProjectDialog";
+import DeleteProjectDialog from "../components/projects/dialogs/DeleteProjectDialog";
 
 function ProjectsPage() {
-  const { projects } = useAppData();
+  const { projects, updateProject, deleteProject } = useAppData();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("updated-desc");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [deletingProject, setDeletingProject] = useState(null);
 
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -49,10 +53,30 @@ function ProjectsPage() {
 
   const hasFilters = normalizedSearch !== "" || status !== "all";
 
+  function handleEditProject(project) {
+    setEditingProject(project);
+  }
+
+  function handleUpdateProject(projectData) {
+    updateProject(editingProject.id, projectData);
+    setEditingProject(null);
+  }
+
+  function handleDeleteProject(project) {
+    setDeletingProject(project);
+  }
+
+  function handleConfirmDelete() {
+    deleteProject(deletingProject.id);
+    setDeletingProject(null);
+  }
+
   function handleClearFilters() {
     setSearch("");
     setStatus("all");
   }
+
+  
 
   return (
     <PageTransition>
@@ -84,11 +108,25 @@ function ProjectsPage() {
             projects={visibleProjects}
             hasFilters={hasFilters}
             onClearFilters={handleClearFilters}
+            onEdit={handleEditProject}
+            onDelete={handleDeleteProject}
           />
         </div>
         <AddProjectDialog
           open={isAddDialogOpen}
           onClose={() => setIsAddDialogOpen(false)}
+        />
+        <EditProjectDialog
+          project={editingProject}
+          open={Boolean(editingProject)}
+          onClose={() => setEditingProject(null)}
+          onSubmit={handleUpdateProject}
+        />
+        <DeleteProjectDialog
+          project={deletingProject}
+          open={Boolean(deletingProject)}
+          onClose={() => setDeletingProject(null)}
+          onConfirm={handleConfirmDelete}
         />
       </div>
     </PageTransition>

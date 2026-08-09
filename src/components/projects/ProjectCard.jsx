@@ -5,7 +5,7 @@ import PriorityIndicator from "../ui/PriorityIndicator";
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onEdit, onDelete }) {
   const visibleTechnologies = project.technologies.slice(0, 3);
   const remainingTechnologies =
     project.technologies.length - visibleTechnologies.length;
@@ -30,7 +30,25 @@ function ProjectCard({ project }) {
             </div>
           </div>
 
-          <StatusBadge status={project.status} />
+          <div className="flex shrink-0 items-center gap-2">
+            <StatusBadge status={project.status} />
+
+            <button
+              type="button"
+              onClick={() => onEdit(project)}
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onDelete(project)}
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              Delete
+            </button>
+          </div>
         </div>
 
         <p className="mt-4 line-clamp-3 text-sm leading-6 text-muted-foreground">

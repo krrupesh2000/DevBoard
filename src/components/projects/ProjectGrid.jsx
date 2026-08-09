@@ -6,7 +6,7 @@ import ProjectCard from "./ProjectCard";
 import { motion } from "motion/react";
 import { staggerContainer } from "../../utils/motion";
 
-function ProjectGrid({ projects, hasFilters, onClearFilters }) {
+function ProjectGrid({ projects, hasFilters, onClearFilters, onEdit, onDelete }) {
   if (projects.length === 0) {
     return (
       <EmptyState
@@ -36,7 +36,7 @@ function ProjectGrid({ projects, hasFilters, onClearFilters }) {
       className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
     >
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard key={project.id} project={project} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </motion.div>
   );

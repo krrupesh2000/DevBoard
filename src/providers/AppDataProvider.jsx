@@ -21,16 +21,40 @@ function AppDataProvider({ children }) {
     return project;
   }
 
+  function updateProject(projectId, projectData) {
+    setProjects((previousProjects) =>
+      previousProjects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              ...projectData,
+              updatedAt: new Date().toISOString(),
+            }
+          : project,
+      ),
+    );
+  }
+
+  function deleteProject(projectId) {
+    setProjects((previousProjects) =>
+      previousProjects.filter((project) => project.id !== projectId),
+    );
+  }
+
   const value = {
     projects,
     tasks,
     activities,
     createProject,
+    updateProject,
+    deleteProject,
   };
 
   return (
     <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>
   );
 }
+
+
 
 export default AppDataProvider;
