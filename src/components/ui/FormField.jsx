@@ -1,3 +1,5 @@
+import { cloneElement, useId } from "react";
+
 import Label from "./Label";
 
 function FormField({
@@ -8,6 +10,16 @@ function FormField({
   children,
   className = "",
 }) {
+  const generatedId = useId();
+  const errorId = `${htmlFor || generatedId}-error`;
+
+  const field = error
+    ? cloneElement(children, {
+        "aria-invalid": true,
+        "aria-describedby": errorId,
+      })
+    : children;
+
   return (
     <div className={["space-y-2", className].join(" ")}>
       {label && (
@@ -16,9 +28,17 @@ function FormField({
         </Label>
       )}
 
-      {children}
+      {field}
 
-      {error && <p className="text-sm text-danger">{error}</p>}
+      {error && (
+        <p
+          id={errorId}
+          className="text-sm text-danger"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 }
