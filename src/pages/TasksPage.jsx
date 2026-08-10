@@ -1,13 +1,16 @@
+
 import { useState } from "react";
 
 import TaskList from "../components/tasks/TaskList";
 import TaskTable from "../components/tasks/TaskTable";
 import TaskToolbar from "../components/tasks/TaskToolbar";
-import PageHeader from "../components/ui/PageHeader";
+import AddTaskDialog from "../components/tasks/dialogs/AddTaskDialog";
+import EditTaskDialog from "../components/tasks/dialogs/EditTaskDialog";
+import DeleteTaskDialog from "../components/tasks/dialogs/DeleteTaskDialog";
 
-import { projects } from "../data/projects";
-import useAppData from "../hooks/useAppData";
+import PageHeader from "../components/ui/PageHeader";
 import PageTransition from "../components/motion/PageTransition";
+import useAppData from "../hooks/useAppData";
 
 const priorityRank = {
   high: 3,
@@ -16,36 +19,56 @@ const priorityRank = {
 };
 
 function TasksPage() {
-  const { tasks } = useAppData();
+  const {
+    tasks,
+    projects,
+    createTask,
+    updateTask,
+    deleteTask,
+  } = useAppData();
+
   const [search, setSearch] = useState("");
   const [project, setProject] = useState("all");
   const [status, setStatus] = useState("all");
   const [priority, setPriority] = useState("all");
   const [sort, setSort] = useState("due-asc");
 
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [deletingTask, setDeletingTask] = useState(null);
+
   const normalizedSearch = search.trim().toLowerCase();
 
-  const projectMap = new Map(projects.map((item) => [item.id, item]));
+  const projectMap = new Map(
+    projects.map((item) => [item.id, item]),
+  );
 
   const visibleTasks = tasks
     .filter((task) => {
       const relatedProject = projectMap.get(task.projectId);
 
-      const projectName = relatedProject?.name?.toLowerCase() ?? "";
+      const projectName =
+        relatedProject?.name?.toLowerCase() ?? "";
 
       const matchesSearch =
         normalizedSearch === "" ||
         task.title.toLowerCase().includes(normalizedSearch) ||
         projectName.includes(normalizedSearch);
 
-      const matchesProject = project === "all" || task.projectId === project;
+      const matchesProject =
+        project === "all" || task.projectId === project;
 
-      const matchesStatus = status === "all" || task.status === status;
+      const matchesStatus =
+        status === "all" || task.status === status;
 
-      const matchesPriority = priority === "all" || task.priority === priority;
+      const matchesPriority =
+        priority === "all" || task.priority === priority;
 
       return (
-        matchesSearch && matchesProject && matchesStatus && matchesPriority
+        matchesSearch &&
+        matchesProject &&
+        matchesStatus &&
+        matchesPriority
       );
     })
     .sort((a, b) => {
@@ -78,12 +101,39 @@ function TasksPage() {
     setPriority("all");
   }
 
+  function handleCreateTask(taskData) {
+    createTask(taskData);
+    setIsAddDialogOpen(false);
+  }
+
+  function handleEditTask(task) {
+    setEditingTask(task);
+  }
+
+  function handleUpdateTask(taskData) {
+    if (!editingTask) return;
+
+    updateTask(editingTask.id, taskData);
+    setEditingTask(null);
+  }
+
+  function handleDeleteTask(task) {
+    setDeletingTask(task);
+  }
+
+  function handleConfirmDelete() {
+    if (!deletingTask) return;
+
+    deleteTask(deletingTask.id);
+    setDeletingTask(null);
+  }
+
   return (
     <PageTransition>
       <div>
         <PageHeader
           title="Tasks"
-          description="Manage tasks, priorities, and deadlines across your projects."
+          description="Manage tasks, priorities, deadlines, and project progress."
         />
 
         <div className="mt-8">
@@ -99,6 +149,7 @@ function TasksPage() {
             sort={sort}
             onSortChange={setSort}
             projects={projects}
+            onAddTask={() => setIsAddDialogOpen(true)}
           />
         </div>
 
@@ -113,6 +164,8 @@ function TasksPage() {
               projectMap={projectMap}
               hasFilters={hasFilters}
               onClearFilters={handleClearFilters}
+              onEdit={handleEditTask}
+              onDelete={handleDeleteTask}
             />
           </div>
 
@@ -122,9 +175,33 @@ function TasksPage() {
               projectMap={projectMap}
               hasFilters={hasFilters}
               onClearFilters={handleClearFilters}
+              onEdit={handleEditTask}
+              onDelete={handleDeleteTask}
             />
           </div>
         </div>
+
+        <AddTaskDialog
+          open={isAddDialogOpen}
+          projects={projects}
+          onClose={() => setIsAddDialogOpen(false)}
+          onSubmit={handleCreateTask}
+        />
+
+        <EditTaskDialog
+          open={Boolean(editingTask)}
+          task={editingTask}
+          projects={projects}
+          onClose={() => setEditingTask(null)}
+          onSubmit={handleUpdateTask}
+        />
+
+        <DeleteTaskDialog
+          open={Boolean(deletingTask)}
+          task={deletingTask}
+          onClose={() => setDeletingTask(null)}
+          onConfirm={handleConfirmDelete}
+        />
       </div>
     </PageTransition>
   );

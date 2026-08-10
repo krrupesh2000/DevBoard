@@ -1,5 +1,6 @@
 import SearchInput from "../ui/SearchInput";
 import Select from "../ui/Select";
+import Button from "../ui/Button";
 
 const statusOptions = [
   { value: "all", label: "All statuses" },
@@ -34,6 +35,7 @@ function TaskToolbar({
   sort,
   onSortChange,
   projects,
+  onAddTask,
 }) {
   const projectOptions = [
     { value: "all", label: "All projects" },
@@ -45,11 +47,22 @@ function TaskToolbar({
 
   return (
     <div className="space-y-3">
-      <SearchInput
-        value={search}
-        onValueChange={onSearchChange}
-        placeholder="Search tasks..."
-      />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <SearchInput
+          value={search}
+          onValueChange={onSearchChange}
+          placeholder="Search tasks..."
+          className="min-w-0 flex-1"
+        />
+
+        <Button
+          type="button"
+          onClick={onAddTask}
+          className="w-full sm:w-auto"
+        >
+          Add Task
+        </Button>
+      </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Select
@@ -89,3 +102,4 @@ function TaskToolbar({
 }
 
 export default TaskToolbar;
+

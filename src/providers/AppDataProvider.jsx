@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 import AppDataContext from "../context/AppDataContext";
@@ -7,16 +8,20 @@ import { tasks as initialTasks } from "../data/tasks";
 import { activities as initialActivities } from "../data/activities";
 
 import { buildProject } from "../utils/projectFactory";
+import { buildTask } from "../utils/taskFactory";
 
 function AppDataProvider({ children }) {
   const [projects, setProjects] = useState(initialProjects);
-  const [tasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState(initialTasks);
   const [activities] = useState(initialActivities);
 
   function createProject(projectData) {
     const project = buildProject(projectData);
 
-    setProjects((previousProjects) => [project, ...previousProjects]);
+    setProjects((previousProjects) => [
+      project,
+      ...previousProjects,
+    ]);
 
     return project;
   }
@@ -41,20 +46,57 @@ function AppDataProvider({ children }) {
     );
   }
 
+  function createTask(taskData) {
+    const task = buildTask(taskData);
+
+    setTasks((previousTasks) => [
+      task,
+      ...previousTasks,
+    ]);
+
+    return task;
+  }
+
+  function updateTask(taskId, taskData) {
+    setTasks((previousTasks) =>
+      previousTasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              ...taskData,
+              updatedAt: new Date().toISOString(),
+            }
+          : task,
+      ),
+    );
+  }
+
+  function deleteTask(taskId) {
+    setTasks((previousTasks) =>
+      previousTasks.filter((task) => task.id !== taskId),
+    );
+  }
+
   const value = {
     projects,
     tasks,
     activities,
+
     createProject,
     updateProject,
     deleteProject,
+
+    createTask,
+    updateTask,
+    deleteTask,
   };
 
   return (
-    <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>
+    <AppDataContext.Provider value={value}>
+      {children}
+    </AppDataContext.Provider>
   );
 }
 
-
-
 export default AppDataProvider;
+
