@@ -3,17 +3,17 @@ import PageTransition from "../components/motion/PageTransition";
 import Card from "../components/ui/Card";
 import PageHeader from "../components/ui/PageHeader";
 import useAppData from "../hooks/useAppData";
-import { projects } from "../data/projects";
-import { tasks } from "../data/tasks";
+
 
 function ActivityPage() {
-  const { activities } = useAppData();
+  const { activities, projects, tasks } = useAppData();
+
   const projectMap = new Map(projects.map((project) => [project.id, project]));
 
   const taskMap = new Map(tasks.map((task) => [task.id, task]));
 
   const sortedActivities = [...activities].sort(
-    (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
 
   return (

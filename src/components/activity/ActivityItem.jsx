@@ -1,9 +1,11 @@
 import {
   PiCheckCircle,
   PiFolderPlus,
+  PiFolderSimple,
   PiListChecks,
   PiPencilSimple,
   PiPlusCircle,
+  PiTrash,
 } from "react-icons/pi";
 
 import { formatDateTime } from "../../utils/date";
@@ -26,6 +28,11 @@ const activityConfig = {
     label: "Task updated",
   },
 
+  "task-deleted": {
+    icon: PiTrash,
+    label: "Task deleted",
+  },
+
   "project-created": {
     icon: PiFolderPlus,
     label: "Project created",
@@ -35,10 +42,20 @@ const activityConfig = {
     icon: PiPencilSimple,
     label: "Project updated",
   },
+
+  "project-deleted": {
+    icon: PiTrash,
+    label: "Project deleted",
+  },
+
+  "project-completed": {
+    icon: PiCheckCircle,
+    label: "Project completed",
+  },
 };
 
 const fallbackConfig = {
-  icon: PiListChecks,
+  icon: PiFolderSimple,
   label: "Activity",
 };
 
@@ -50,9 +67,12 @@ function ActivityItem({ activity, project, task, isLast = false }) {
   return (
     <motion.li variants={fadeUp} className="relative flex gap-4">
       {/* Timeline */}
-      <div className="relative flex shrink-0 flex-col items-center">
-        <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background">
-          <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+      <div className="relative flex shrink-0 justify-center">
+        <div
+          className="flex size-9 items-center justify-center rounded-full border border-border bg-background"
+          aria-hidden="true"
+        >
+          <Icon size={18} />
         </div>
 
         {!isLast && (
@@ -71,20 +91,20 @@ function ActivityItem({ activity, project, task, isLast = false }) {
 
             {(project || task) && (
               <p className="mt-1 text-sm text-muted-foreground">
-                {project?.name}
+                {project?.name ?? task?.title}
 
                 {project && task && <span aria-hidden="true"> · </span>}
 
-                {task?.title}
+                {project && task?.title}
               </p>
             )}
           </div>
 
           <time
-            dateTime={activity.timestamp}
+            dateTime={activity.createdAt}
             className="shrink-0 text-xs text-muted-foreground"
           >
-            {formatDateTime(activity.timestamp)}
+            {formatDateTime(activity.createdAt)}
           </time>
         </div>
 
