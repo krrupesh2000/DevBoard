@@ -27,47 +27,47 @@ function TaskTable({
   return (
     <Card className="overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-190">
+        <table className="w-full min-w-[760px]">
           <thead className="border-b border-border bg-muted/30">
             <tr>
               <th
                 scope="col"
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="w-[30%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Task
               </th>
 
               <th
                 scope="col"
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="w-[20%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Project
               </th>
 
               <th
                 scope="col"
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Status
               </th>
 
               <th
                 scope="col"
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Priority
               </th>
 
               <th
                 scope="col"
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Due Date
               </th>
 
               <th
                 scope="col"
-                className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:px-5"
               >
                 Actions
               </th>
@@ -83,25 +83,27 @@ function TaskTable({
                   key={task.id}
                   className="transition-colors hover:bg-muted/30"
                 >
-                  <td className="px-5 py-4">
-                    <p className="max-w-sm text-sm font-medium">{task.title}</p>
+                  <td className="px-4 py-4 lg:px-5">
+                    <p className="max-w-sm break-words text-sm font-medium">
+                      {task.title}
+                    </p>
                   </td>
 
-                  <td className="px-5 py-4">
-                    <span className="text-sm text-muted-foreground">
+                  <td className="px-4 py-4 lg:px-5">
+                    <span className="block max-w-[180px] truncate text-sm text-muted-foreground">
                       {project?.name ?? "Unknown project"}
                     </span>
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-4 py-4 lg:px-5">
                     <StatusBadge status={task.status} />
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-4 py-4 lg:px-5">
                     <PriorityIndicator priority={task.priority} />
                   </td>
 
-                  <td className="whitespace-nowrap px-5 py-4">
+                  <td className="whitespace-nowrap px-4 py-4 lg:px-5">
                     <time
                       dateTime={task.dueDate}
                       className="text-sm text-muted-foreground"
@@ -110,7 +112,7 @@ function TaskTable({
                     </time>
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-4 py-4 lg:px-5">
                     <div className="flex justify-end gap-1">
                       <IconButton
                         label="Edit task"

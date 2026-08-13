@@ -54,21 +54,21 @@ function ProjectToolbar({
   onAddProject,
 }) {
   return (
-    <div className="flex flex-col gap-3 lg:flex-row">
+    <div className="space-y-3">
       <SearchInput
         value={search}
         onValueChange={onSearchChange}
         placeholder="Search projects..."
-        className="min-w-0 flex-1"
+        className="w-full"
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:flex">
+      <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
         <Select
           value={status}
           onValueChange={onStatusChange}
           ariaLabel="Filter projects by status"
           options={statusOptions}
-          className="w-full sm:min-w-40"
+          className="w-full min-w-0"
         />
 
         <Select
@@ -76,10 +76,16 @@ function ProjectToolbar({
           onValueChange={onSortChange}
           ariaLabel="Sort projects"
           options={sortOptions}
-          className="w-full sm:min-w-48"
+          className="w-full min-w-0"
         />
 
-        <Button onClick={onAddProject}>+ New Project</Button>
+        <Button
+          type="button"
+          onClick={onAddProject}
+          className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto"
+        >
+          + New Project
+        </Button>
       </div>
     </div>
   );

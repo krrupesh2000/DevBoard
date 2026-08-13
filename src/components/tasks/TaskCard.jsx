@@ -9,14 +9,14 @@ import { formatDate } from "../../utils/date";
 
 function TaskCard({ task, project, onEdit, onArchive, onDelete }) {
   return (
-    <Card className="p-5">
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="truncate text-base font-semibold tracking-tight">
+    <Card className="p-4 sm:p-5">
+      <div className="flex min-w-0 items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h2 className="break-words text-sm font-semibold tracking-tight sm:text-base">
             {task.title}
           </h2>
 
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 truncate text-xs text-muted-foreground">
             {project?.name ?? "Unknown project"}
           </p>
         </div>
@@ -26,7 +26,7 @@ function TaskCard({ task, project, onEdit, onArchive, onDelete }) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-4">
         <PriorityIndicator priority={task.priority} />
 
         <time dateTime={task.dueDate} className="text-xs text-muted-foreground">

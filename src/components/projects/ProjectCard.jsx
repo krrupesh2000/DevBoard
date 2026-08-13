@@ -24,10 +24,10 @@ function ProjectCard({ project, progress = 0, onEdit, onArchive, onDelete }) {
       transition={{ duration: 0.2 }}
       className="h-full"
     >
-      <Card className="flex h-full flex-col p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h2 className="truncate text-lg font-semibold tracking-tight">
+      <Card className="flex h-full flex-col p-4 sm:p-5">
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h2 className="break-words text-base font-semibold tracking-tight sm:text-lg">
               {project.name}
             </h2>
 
@@ -36,7 +36,7 @@ function ProjectCard({ project, progress = 0, onEdit, onArchive, onDelete }) {
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 flex-col items-end gap-2 min-[480px]:flex-row min-[480px]:items-center">
             <StatusBadge status={project.status} />
 
             <div className="flex items-center gap-1">
@@ -70,7 +70,7 @@ function ProjectCard({ project, progress = 0, onEdit, onArchive, onDelete }) {
           {visibleTechnologies.map((technology) => (
             <span
               key={technology}
-              className="rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
+              className="max-w-full rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
             >
               {technology}
             </span>

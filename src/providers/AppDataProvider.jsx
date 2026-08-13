@@ -18,6 +18,14 @@ const STORAGE_KEYS = {
   activities: "devboard.activities",
 };
 
+function removeProjectLifecycleState(task) {
+  const cleanedTask = { ...task };
+
+  delete cleanedTask.projectLifecycleState;
+
+  return cleanedTask;
+}
+
 function AppDataProvider({ children }) {
   const [projects, setProjects] = useState(() =>
     loadFromStorage(STORAGE_KEYS.projects, initialProjects),
@@ -47,9 +55,9 @@ function AppDataProvider({ children }) {
     setActivities((previousActivities) => [activity, ...previousActivities]);
   }
 
-  // -------------------------
+  // =========================
   // PROJECTS
-  // -------------------------
+  // =========================
 
   function createProject(projectData) {
     const project = buildProject(projectData);
@@ -123,6 +131,21 @@ function AppDataProvider({ children }) {
       ),
     );
 
+    setTasks((previousTasks) =>
+      previousTasks.map((task) => {
+        if (task.projectId !== projectId || task.archivedAt || task.deletedAt) {
+          return task;
+        }
+
+        return {
+          ...task,
+          archivedAt: timestamp,
+          updatedAt: timestamp,
+          projectLifecycleState: "archived",
+        };
+      }),
+    );
+
     addActivity(
       buildActivity({
         action: "archived",
@@ -151,6 +174,52 @@ function AppDataProvider({ children }) {
             }
           : item,
       ),
+    );
+
+    setTasks((previousTasks) =>
+      previousTasks.map((task) => {
+        if (task.projectId !== projectId) {
+          return task;
+        }
+
+        // Project was archived.
+        if (task.projectLifecycleState === "archived") {
+          const restoredTask = removeProjectLifecycleState(task);
+
+          return {
+            ...restoredTask,
+            archivedAt: null,
+            deletedAt: null,
+            updatedAt: timestamp,
+          };
+        }
+
+        // Project was moved to Trash while task was active.
+        if (task.projectLifecycleState === "deleted-from-active") {
+          const restoredTask = removeProjectLifecycleState(task);
+
+          return {
+            ...restoredTask,
+            archivedAt: null,
+            deletedAt: null,
+            updatedAt: timestamp,
+          };
+        }
+
+        // Project was moved to Trash while task was archived.
+        if (task.projectLifecycleState === "deleted-from-archived") {
+          const restoredTask = removeProjectLifecycleState(task);
+
+          return {
+            ...restoredTask,
+            archivedAt: task.archivedAt ?? timestamp,
+            deletedAt: null,
+            updatedAt: timestamp,
+          };
+        }
+
+        return task;
+      }),
     );
 
     addActivity(
@@ -183,6 +252,24 @@ function AppDataProvider({ children }) {
       ),
     );
 
+    setTasks((previousTasks) =>
+      previousTasks.map((task) => {
+        if (task.projectId !== projectId || task.deletedAt) {
+          return task;
+        }
+
+        const previousState = task.archivedAt ? "archived" : "active";
+
+        return {
+          ...task,
+          archivedAt: null,
+          deletedAt: timestamp,
+          updatedAt: timestamp,
+          projectLifecycleState: `deleted-from-${previousState}`,
+        };
+      }),
+    );
+
     addActivity(
       buildActivity({
         action: "deleted",
@@ -202,7 +289,7 @@ function AppDataProvider({ children }) {
       previousProjects.filter((item) => item.id !== projectId),
     );
 
-    // Permanently remove associated tasks as well.
+    // Permanently delete all tasks belonging to the project.
     setTasks((previousTasks) =>
       previousTasks.filter((task) => task.projectId !== projectId),
     );
@@ -217,9 +304,9 @@ function AppDataProvider({ children }) {
     );
   }
 
-  // -------------------------
+  // =========================
   // TASKS
-  // -------------------------
+  // =========================
 
   function createTask(taskData) {
     const task = buildTask(taskData);
@@ -285,6 +372,7 @@ function AppDataProvider({ children }) {
               archivedAt: timestamp,
               deletedAt: null,
               updatedAt: timestamp,
+              projectLifecycleState: null,
             }
           : item,
       ),
@@ -316,6 +404,7 @@ function AppDataProvider({ children }) {
               archivedAt: null,
               deletedAt: null,
               updatedAt: timestamp,
+              projectLifecycleState: null,
             }
           : item,
       ),
@@ -347,6 +436,7 @@ function AppDataProvider({ children }) {
               archivedAt: null,
               deletedAt: timestamp,
               updatedAt: timestamp,
+              projectLifecycleState: null,
             }
           : item,
       ),
