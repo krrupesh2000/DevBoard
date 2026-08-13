@@ -50,16 +50,12 @@ function TaskToolbar({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <SearchInput
           value={search}
-          onValueChange={onSearchChange}
+          onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search tasks..."
-          className="min-w-0 flex-1"
+          className="w-full sm:max-w-sm"
         />
 
-        <Button
-          type="button"
-          onClick={onAddTask}
-          className="w-full sm:w-auto"
-        >
+        <Button type="button" onClick={onAddTask} className="w-full sm:w-auto">
           Add Task
         </Button>
       </div>
@@ -102,4 +98,3 @@ function TaskToolbar({
 }
 
 export default TaskToolbar;
-

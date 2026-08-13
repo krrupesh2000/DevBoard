@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import TaskList from "../components/tasks/TaskList";
@@ -8,85 +7,34 @@ import AddTaskDialog from "../components/tasks/dialogs/AddTaskDialog";
 import EditTaskDialog from "../components/tasks/dialogs/EditTaskDialog";
 import DeleteTaskDialog from "../components/tasks/dialogs/DeleteTaskDialog";
 
+import { filterAndSortTasks } from "../utils/taskFilters";
+
 import PageHeader from "../components/ui/PageHeader";
 import PageTransition from "../components/motion/PageTransition";
-import useAppData from "../hooks/useAppData";
 
-const priorityRank = {
-  high: 3,
-  medium: 2,
-  low: 1,
-};
+import useAppData from "../hooks/useAppData";
+import useTaskFilters from "../hooks/useTaskFilters";
 
 function TasksPage() {
-  const {
-    tasks,
-    projects,
-    createTask,
-    updateTask,
-    deleteTask,
-  } = useAppData();
+  const { tasks, projects, createTask, updateTask, deleteTask } = useAppData();
 
-  const [search, setSearch] = useState("");
-  const [project, setProject] = useState("all");
-  const [status, setStatus] = useState("all");
-  const [priority, setPriority] = useState("all");
-  const [sort, setSort] = useState("due-asc");
+  const { filters, updateFilter, clearFilters } = useTaskFilters();
+
+  const { search, project, status, priority, sort } = filters;
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTask, setDeletingTask] = useState(null);
 
-  const normalizedSearch = search.trim().toLowerCase();
-
-  const projectMap = new Map(
-    projects.map((item) => [item.id, item]),
-  );
-
-  const visibleTasks = tasks
-    .filter((task) => {
-      const relatedProject = projectMap.get(task.projectId);
-
-      const projectName =
-        relatedProject?.name?.toLowerCase() ?? "";
-
-      const matchesSearch =
-        normalizedSearch === "" ||
-        task.title.toLowerCase().includes(normalizedSearch) ||
-        projectName.includes(normalizedSearch);
-
-      const matchesProject =
-        project === "all" || task.projectId === project;
-
-      const matchesStatus =
-        status === "all" || task.status === status;
-
-      const matchesPriority =
-        priority === "all" || task.priority === priority;
-
-      return (
-        matchesSearch &&
-        matchesProject &&
-        matchesStatus &&
-        matchesPriority
-      );
-    })
-    .sort((a, b) => {
-      switch (sort) {
-        case "due-desc":
-          return new Date(b.dueDate) - new Date(a.dueDate);
-
-        case "priority-desc":
-          return priorityRank[b.priority] - priorityRank[a.priority];
-
-        case "title-asc":
-          return a.title.localeCompare(b.title);
-
-        case "due-asc":
-        default:
-          return new Date(a.dueDate) - new Date(b.dueDate);
-      }
-    });
+  const { visibleTasks, normalizedSearch, projectMap } = filterAndSortTasks({
+    tasks,
+    projects,
+    search,
+    project,
+    status,
+    priority,
+    sort,
+  });
 
   const hasFilters =
     normalizedSearch !== "" ||
@@ -95,10 +43,7 @@ function TasksPage() {
     priority !== "all";
 
   function handleClearFilters() {
-    setSearch("");
-    setProject("all");
-    setStatus("all");
-    setPriority("all");
+    clearFilters();
   }
 
   function handleCreateTask(taskData) {
@@ -133,21 +78,21 @@ function TasksPage() {
       <div>
         <PageHeader
           title="Tasks"
-          description="Manage tasks, priorities, deadlines, and project progress."
+          description="Manage and track your project tasks."
         />
 
         <div className="mt-8">
           <TaskToolbar
             search={search}
-            onSearchChange={setSearch}
+            onSearchChange={(value) => updateFilter("search", value)}
             project={project}
-            onProjectChange={setProject}
+            onProjectChange={(value) => updateFilter("project", value)}
             status={status}
-            onStatusChange={setStatus}
+            onStatusChange={(value) => updateFilter("status", value)}
             priority={priority}
-            onPriorityChange={setPriority}
+            onPriorityChange={(value) => updateFilter("priority", value)}
             sort={sort}
-            onSortChange={setSort}
+            onSortChange={(value) => updateFilter("sort", value)}
             projects={projects}
             onAddTask={() => setIsAddDialogOpen(true)}
           />

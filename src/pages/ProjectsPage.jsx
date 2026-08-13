@@ -1,55 +1,36 @@
-
 import { useState } from "react";
+
 import ProjectGrid from "../components/projects/ProjectGrid";
 import ProjectToolbar from "../components/projects/ProjectToolbar";
+
 import PageHeader from "../components/ui/PageHeader";
-import useAppData from "../hooks/useAppData";
 import PageTransition from "../components/motion/PageTransition";
+
 import AddProjectDialog from "../components/projects/dialogs/AddProjectDialog";
 import EditProjectDialog from "../components/projects/dialogs/EditProjectDialog";
 import DeleteProjectDialog from "../components/projects/dialogs/DeleteProjectDialog";
 
+import useAppData from "../hooks/useAppData";
+import { filterAndSortProjects } from "../utils/projectFilters";
+
 function ProjectsPage() {
-  const { projects, updateProject, deleteProject } = useAppData();
+  const { projects, tasks, updateProject, deleteProject } = useAppData();
+
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("updated-desc");
+
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [deletingProject, setDeletingProject] = useState(null);
 
-  const normalizedSearch = search.trim().toLowerCase();
-
-  const visibleProjects = projects
-    .filter((project) => {
-      const matchesSearch =
-        normalizedSearch === "" ||
-        project.name.toLowerCase().includes(normalizedSearch) ||
-        project.description.toLowerCase().includes(normalizedSearch) ||
-        project.technologies.some((technology) =>
-          technology.toLowerCase().includes(normalizedSearch),
-        );
-
-      const matchesStatus = status === "all" || project.status === status;
-
-      return matchesSearch && matchesStatus;
-    })
-    .sort((a, b) => {
-      switch (sort) {
-        case "progress-desc":
-          return b.progress - a.progress;
-
-        case "progress-asc":
-          return a.progress - b.progress;
-
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-
-        case "updated-desc":
-        default:
-          return new Date(b.updatedAt) - new Date(a.updatedAt);
-      }
-    });
+  const { visibleProjects, normalizedSearch } = filterAndSortProjects({
+    projects,
+    tasks,
+    search,
+    status,
+    sort,
+  });
 
   const hasFilters = normalizedSearch !== "" || status !== "all";
 
@@ -58,6 +39,8 @@ function ProjectsPage() {
   }
 
   function handleUpdateProject(projectData) {
+    if (!editingProject) return;
+
     updateProject(editingProject.id, projectData);
     setEditingProject(null);
   }
@@ -67,6 +50,8 @@ function ProjectsPage() {
   }
 
   function handleConfirmDelete() {
+    if (!deletingProject) return;
+
     deleteProject(deletingProject.id);
     setDeletingProject(null);
   }
@@ -76,14 +61,12 @@ function ProjectsPage() {
     setStatus("all");
   }
 
-  
-
   return (
     <PageTransition>
       <div>
         <PageHeader
           title="Projects"
-          description="Track progress and manage your development projects."
+          description="Manage and track your projects."
         />
 
         <div className="mt-8">
@@ -106,22 +89,26 @@ function ProjectsPage() {
         <div className="mt-4">
           <ProjectGrid
             projects={visibleProjects}
+            tasks={tasks}
             hasFilters={hasFilters}
             onClearFilters={handleClearFilters}
             onEdit={handleEditProject}
             onDelete={handleDeleteProject}
           />
         </div>
+
         <AddProjectDialog
           open={isAddDialogOpen}
           onClose={() => setIsAddDialogOpen(false)}
         />
+
         <EditProjectDialog
           project={editingProject}
           open={Boolean(editingProject)}
           onClose={() => setEditingProject(null)}
           onSubmit={handleUpdateProject}
         />
+
         <DeleteProjectDialog
           project={deletingProject}
           open={Boolean(deletingProject)}

@@ -1,5 +1,4 @@
-import buildActivity from "../utils/activityFactory";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AppDataContext from "../context/AppDataContext";
 
@@ -9,11 +8,40 @@ import { activities as initialActivities } from "../data/activities";
 
 import { buildProject } from "../utils/projectFactory";
 import { buildTask } from "../utils/taskFactory";
+import buildActivity from "../utils/activityFactory";
+
+import { loadFromStorage, saveToStorage } from "../utils/storage";
+
+const STORAGE_KEYS = {
+  projects: "devboard.projects",
+  tasks: "devboard.tasks",
+  activities: "devboard.activities",
+};
 
 function AppDataProvider({ children }) {
-  const [projects, setProjects] = useState(initialProjects);
-  const [tasks, setTasks] = useState(initialTasks);
-  const [activities, setActivities] = useState(initialActivities);
+  const [projects, setProjects] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.projects, initialProjects),
+  );
+
+  const [tasks, setTasks] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.tasks, initialTasks),
+  );
+
+  const [activities, setActivities] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.activities, initialActivities),
+  );
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.projects, projects);
+  }, [projects]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.tasks, tasks);
+  }, [tasks]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.activities, activities);
+  }, [activities]);
 
   function addActivity(activity) {
     setActivities((previousActivities) => [activity, ...previousActivities]);
@@ -49,19 +77,31 @@ function AppDataProvider({ children }) {
       ),
     );
 
-    const updatedProjectName =
-      projectData.name ??
-      projects.find((project) => project.id === projectId)?.name ??
-      "Project";
-
-    addActivity(
-      buildActivity({
-        action: "updated",
-        entityType: "project",
-        entityId: projectId,
-        entityName: updatedProjectName,
-      }),
+    const existingProject = projects.find(
+      (project) => project.id === projectId,
     );
+
+    if (existingProject) {
+      const updatedProject = {
+        ...existingProject,
+        ...projectData,
+      };
+
+      const action =
+        updatedProject.status === "completed" &&
+        existingProject.status !== "completed"
+          ? "completed"
+          : "updated";
+
+      addActivity(
+        buildActivity({
+          action,
+          entityType: "project",
+          entityId: projectId,
+          entityName: updatedProject.name,
+        }),
+      );
+    }
   }
 
   function deleteProject(projectId) {
@@ -69,6 +109,10 @@ function AppDataProvider({ children }) {
 
     setProjects((previousProjects) =>
       previousProjects.filter((project) => project.id !== projectId),
+    );
+
+    setTasks((previousTasks) =>
+      previousTasks.filter((task) => task.projectId !== projectId),
     );
 
     if (project) {

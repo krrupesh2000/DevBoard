@@ -110,7 +110,7 @@ function DashboardPage() {
           aria-label="Project and task analytics"
           className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)]"
         >
-          <ProjectProgressChart projects={projects} />
+          <ProjectProgressChart projects={projects} tasks={tasks} />
 
           <TaskDistributionChart data={taskDistribution} total={totalTasks} />
         </section>
@@ -120,7 +120,7 @@ function DashboardPage() {
           aria-label="Recent projects and upcoming tasks"
           className="mt-6 grid gap-6 xl:grid-cols-2"
         >
-          <RecentProjects projects={recentProjects} />
+          <RecentProjects projects={recentProjects} tasks={tasks} />
 
           <UpcomingTasks tasks={upcomingTasks} projectMap={projectMap} />
         </section>

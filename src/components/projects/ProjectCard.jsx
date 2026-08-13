@@ -1,15 +1,17 @@
 import { motion, useReducedMotion } from "motion/react";
+
 import { fadeUp } from "../../utils/motion";
 import Card from "../ui/Card";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
 
-function ProjectCard({ project, onEdit, onDelete }) {
+function ProjectCard({ project, progress = 0, onEdit, onDelete }) {
   const visibleTechnologies = project.technologies.slice(0, 3);
   const remainingTechnologies =
     project.technologies.length - visibleTechnologies.length;
-  const shouldReduceMotion = useReducedMotion();  
+
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -73,7 +75,7 @@ function ProjectCard({ project, onEdit, onDelete }) {
         </div>
 
         <div className="mt-auto pt-6">
-          <ProgressBar value={project.progress} />
+          <ProgressBar value={progress} />
         </div>
       </Card>
     </motion.div>

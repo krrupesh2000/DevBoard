@@ -10,10 +10,12 @@ import {
 
 import Card from "../ui/Card";
 
-function ProjectProgressChart({ projects }) {
+import { getProjectStats } from "../../utils/projectStats";
+
+function ProjectProgressChart({ projects, tasks }) {
   const chartData = projects.map((project) => ({
     name: project.name,
-    progress: project.progress,
+    progress: getProjectStats(project.id, tasks).progress,
   }));
 
   return (

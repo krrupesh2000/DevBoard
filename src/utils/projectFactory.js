@@ -9,7 +9,6 @@ export function buildProject(projectData) {
     priority: projectData.priority,
     technologies: projectData.technologies ?? [],
     dueDate: projectData.dueDate,
-    progress: 0,
     createdAt: now,
     updatedAt: now,
   };
