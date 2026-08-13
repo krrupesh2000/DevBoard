@@ -7,28 +7,26 @@ function DeleteProjectDialog({ project, open, onClose, onConfirm }) {
   }
 
   return (
-    <Dialog open={open} title="Delete Project" onClose={onClose}>
-      <div className="space-y-6">
-        <div>
-          <p className="text-sm leading-6 text-muted-foreground">
-            Are you sure you want to delete{" "}
-            <span className="font-medium text-foreground">{project.name}</span>?
-          </p>
+    <Dialog open={open} title="Move Project to Trash" onClose={onClose}>
+      <div>
+        <p className="text-sm text-foreground">
+          Are you sure you want to move{" "}
+          <span className="font-semibold">{project.name}</span> to the trash?
+        </p>
 
-          <p className="mt-2 text-sm text-muted-foreground">
-            This action cannot be undone.
-          </p>
-        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          You can restore it later from Trash.
+        </p>
+      </div>
 
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
+      <div className="mt-6 flex justify-end gap-3">
+        <Button type="button" variant="secondary" onClick={onClose}>
+          Cancel
+        </Button>
 
-          <Button type="button" variant="danger" onClick={onConfirm}>
-            Delete Project
-          </Button>
-        </div>
+        <Button type="button" variant="danger" onClick={onConfirm}>
+          Move to Trash
+        </Button>
       </div>
     </Dialog>
   );

@@ -1,33 +1,35 @@
 import Dialog from "../../ui/Dialog";
 import Button from "../../ui/Button";
 
-function DeleteTaskDialog({ open, task, onClose, onConfirm }) {
+function DeleteTaskDialog({ task, open, onClose, onConfirm }) {
   if (!task) {
     return null;
   }
 
   return (
-    <Dialog open={open} title="Delete Task" onClose={onClose}>
-      <div className="space-y-5">
-        <p className="text-sm leading-6 text-muted-foreground">
-          Are you sure you want to delete{" "}
-          <span className="font-medium text-foreground">{task.title}</span>?
-          This action cannot be undone.
+    <Dialog open={open} title="Move Task to Trash" onClose={onClose}>
+      <div>
+        <p className="text-sm text-foreground">
+          Are you sure you want to move{" "}
+          <span className="font-semibold">{task.title}</span> to the trash?
         </p>
 
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+        <p className="mt-2 text-sm text-muted-foreground">
+          You can restore it later from Trash.
+        </p>
+      </div>
 
-          <Button type="button" variant="destructive" onClick={onConfirm}>
-            Delete Task
-          </Button>
-        </div>
+      <div className="mt-6 flex justify-end gap-3">
+        <Button type="button" variant="secondary" onClick={onClose}>
+          Cancel
+        </Button>
+
+        <Button type="button" variant="danger" onClick={onConfirm}>
+          Move to Trash
+        </Button>
       </div>
     </Dialog>
   );
 }
 
 export default DeleteTaskDialog;
-

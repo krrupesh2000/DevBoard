@@ -61,3 +61,15 @@ export function filterAndSortTasks({
     projectMap,
   };
 }
+
+export function getActiveTasks(tasks) {
+  return tasks.filter((task) => !task.archivedAt && !task.deletedAt);
+}
+
+export function getArchivedTasks(tasks) {
+  return tasks.filter((task) => task.archivedAt && !task.deletedAt);
+}
+
+export function getDeletedTasks(tasks) {
+  return tasks.filter((task) => task.deletedAt);
+}

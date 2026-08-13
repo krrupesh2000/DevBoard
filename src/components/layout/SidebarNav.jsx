@@ -1,9 +1,12 @@
 import {
+  PiArchive,
   PiChartPieSlice,
   PiCheckSquare,
   PiFolder,
   PiPulse,
+  PiTrash,
 } from "react-icons/pi";
+
 import { NavLink } from "react-router";
 
 const navigation = [
@@ -27,6 +30,16 @@ const navigation = [
     label: "Activity",
     href: "/dashboard/activity",
     icon: PiPulse,
+  },
+  {
+    label: "Archive",
+    href: "/dashboard/archive",
+    icon: PiArchive,
+  },
+  {
+    label: "Trash",
+    href: "/dashboard/trash",
+    icon: PiTrash,
   },
 ];
 

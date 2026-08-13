@@ -11,5 +11,9 @@ export function buildTask(taskData) {
     dueDate: taskData.dueDate,
     createdAt: now,
     updatedAt: now,
+
+    // Lifecycle state
+    archivedAt: null,
+    deletedAt: null,
   };
 }

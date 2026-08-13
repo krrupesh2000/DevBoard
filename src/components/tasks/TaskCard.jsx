@@ -1,10 +1,13 @@
+import { PiArchive, PiNotePencil, PiTrash } from "react-icons/pi";
 
 import Card from "../ui/Card";
+import IconButton from "../ui/IconButton";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import StatusBadge from "../ui/StatusBadge";
+
 import { formatDate } from "../../utils/date";
 
-function TaskCard({ task, project, onEdit, onDelete }) {
+function TaskCard({ task, project, onEdit, onArchive, onDelete }) {
   return (
     <Card className="p-5">
       <div className="flex items-start justify-between gap-4">
@@ -26,34 +29,33 @@ function TaskCard({ task, project, onEdit, onDelete }) {
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
         <PriorityIndicator priority={task.priority} />
 
-        <time
-          dateTime={task.dueDate}
-          className="text-xs text-muted-foreground"
-        >
+        <time dateTime={task.dueDate} className="text-xs text-muted-foreground">
           {formatDate(task.dueDate)}
         </time>
       </div>
 
-      <div className="mt-4 flex justify-end gap-2">
-        <button
-          type="button"
+      <div className="mt-4 flex justify-end gap-1">
+        <IconButton
+          label="Edit task"
+          icon={<PiNotePencil size={17} aria-hidden="true" />}
           onClick={() => onEdit(task)}
-          className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          Edit
-        </button>
+        />
 
-        <button
-          type="button"
+        <IconButton
+          label="Archive task"
+          icon={<PiArchive size={17} aria-hidden="true" />}
+          onClick={() => onArchive(task)}
+        />
+
+        <IconButton
+          label="Move task to trash"
+          variant="danger"
+          icon={<PiTrash size={17} aria-hidden="true" />}
           onClick={() => onDelete(task)}
-          className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          Delete
-        </button>
+        />
       </div>
     </Card>
   );
 }
 
 export default TaskCard;
-

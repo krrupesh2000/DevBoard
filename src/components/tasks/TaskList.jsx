@@ -1,7 +1,15 @@
 import TaskCard from "./TaskCard";
 import TaskEmptyState from "./TaskEmptyState";
 
-function TaskList({ tasks, projectMap, hasFilters, onClearFilters, onEdit, onDelete }) {
+function TaskList({
+  tasks,
+  projectMap,
+  hasFilters,
+  onClearFilters,
+  onEdit,
+  onArchive,
+  onDelete,
+}) {
   if (tasks.length === 0) {
     return (
       <TaskEmptyState hasFilters={hasFilters} onClearFilters={onClearFilters} />
@@ -16,6 +24,7 @@ function TaskList({ tasks, projectMap, hasFilters, onClearFilters, onEdit, onDel
           task={task}
           project={projectMap.get(task.projectId)}
           onEdit={onEdit}
+          onArchive={onArchive}
           onDelete={onDelete}
         />
       ))}

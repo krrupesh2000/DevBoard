@@ -53,3 +53,17 @@ export function filterAndSortProjects({
     normalizedSearch,
   };
 }
+
+export function getActiveProjects(projects) {
+  return projects.filter(
+    (project) => !project.archivedAt && !project.deletedAt,
+  );
+}
+
+export function getArchivedProjects(projects) {
+  return projects.filter((project) => project.archivedAt && !project.deletedAt);
+}
+
+export function getDeletedProjects(projects) {
+  return projects.filter((project) => project.deletedAt);
+}

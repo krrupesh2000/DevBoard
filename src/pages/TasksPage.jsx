@@ -3,11 +3,12 @@ import { useState } from "react";
 import TaskList from "../components/tasks/TaskList";
 import TaskTable from "../components/tasks/TaskTable";
 import TaskToolbar from "../components/tasks/TaskToolbar";
+
 import AddTaskDialog from "../components/tasks/dialogs/AddTaskDialog";
 import EditTaskDialog from "../components/tasks/dialogs/EditTaskDialog";
 import DeleteTaskDialog from "../components/tasks/dialogs/DeleteTaskDialog";
 
-import { filterAndSortTasks } from "../utils/taskFilters";
+import { filterAndSortTasks, getActiveTasks } from "../utils/taskFilters";
 
 import PageHeader from "../components/ui/PageHeader";
 import PageTransition from "../components/motion/PageTransition";
@@ -16,18 +17,23 @@ import useAppData from "../hooks/useAppData";
 import useTaskFilters from "../hooks/useTaskFilters";
 
 function TasksPage() {
-  const { tasks, projects, createTask, updateTask, deleteTask } = useAppData();
+  const { tasks, projects, createTask, updateTask, archiveTask, deleteTask } =
+    useAppData();
 
   const { filters, updateFilter, clearFilters } = useTaskFilters();
 
   const { search, project, status, priority, sort } = filters;
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
   const [editingTask, setEditingTask] = useState(null);
+
   const [deletingTask, setDeletingTask] = useState(null);
 
+  const activeTasks = getActiveTasks(tasks);
+
   const { visibleTasks, normalizedSearch, projectMap } = filterAndSortTasks({
-    tasks,
+    tasks: activeTasks,
     projects,
     search,
     project,
@@ -41,10 +47,6 @@ function TasksPage() {
     project !== "all" ||
     status !== "all" ||
     priority !== "all";
-
-  function handleClearFilters() {
-    clearFilters();
-  }
 
   function handleCreateTask(taskData) {
     createTask(taskData);
@@ -60,6 +62,10 @@ function TasksPage() {
 
     updateTask(editingTask.id, taskData);
     setEditingTask(null);
+  }
+
+  function handleArchiveTask(task) {
+    archiveTask(task.id);
   }
 
   function handleDeleteTask(task) {
@@ -78,7 +84,7 @@ function TasksPage() {
       <div>
         <PageHeader
           title="Tasks"
-          description="Manage and track your project tasks."
+          description="Manage and track your active project tasks."
         />
 
         <div className="mt-8">
@@ -108,8 +114,9 @@ function TasksPage() {
               tasks={visibleTasks}
               projectMap={projectMap}
               hasFilters={hasFilters}
-              onClearFilters={handleClearFilters}
+              onClearFilters={clearFilters}
               onEdit={handleEditTask}
+              onArchive={handleArchiveTask}
               onDelete={handleDeleteTask}
             />
           </div>
@@ -119,8 +126,9 @@ function TasksPage() {
               tasks={visibleTasks}
               projectMap={projectMap}
               hasFilters={hasFilters}
-              onClearFilters={handleClearFilters}
+              onClearFilters={clearFilters}
               onEdit={handleEditTask}
+              onArchive={handleArchiveTask}
               onDelete={handleDeleteTask}
             />
           </div>

@@ -12,6 +12,7 @@ function ProjectGrid({
   hasFilters,
   onClearFilters,
   onEdit,
+  onArchive,
   onDelete,
 }) {
   if (projects.length === 0) {
@@ -39,6 +40,7 @@ function ProjectGrid({
             project={project}
             progress={progress}
             onEdit={onEdit}
+            onArchive={onArchive}
             onDelete={onDelete}
           />
         );

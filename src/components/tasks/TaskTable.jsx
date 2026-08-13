@@ -1,8 +1,12 @@
+import { PiArchive, PiNotePencil, PiTrash } from "react-icons/pi";
 
 import Card from "../ui/Card";
+import IconButton from "../ui/IconButton";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import StatusBadge from "../ui/StatusBadge";
+
 import { formatDate } from "../../utils/date";
+
 import TaskEmptyState from "./TaskEmptyState";
 
 function TaskTable({
@@ -11,14 +15,12 @@ function TaskTable({
   hasFilters,
   onClearFilters,
   onEdit,
+  onArchive,
   onDelete,
 }) {
   if (tasks.length === 0) {
     return (
-      <TaskEmptyState
-        hasFilters={hasFilters}
-        onClearFilters={onClearFilters}
-      />
+      <TaskEmptyState hasFilters={hasFilters} onClearFilters={onClearFilters} />
     );
   }
 
@@ -82,9 +84,7 @@ function TaskTable({
                   className="transition-colors hover:bg-muted/30"
                 >
                   <td className="px-5 py-4">
-                    <p className="max-w-sm text-sm font-medium">
-                      {task.title}
-                    </p>
+                    <p className="max-w-sm text-sm font-medium">{task.title}</p>
                   </td>
 
                   <td className="px-5 py-4">
@@ -111,22 +111,25 @@ function TaskTable({
                   </td>
 
                   <td className="px-5 py-4">
-                    <div className="flex justify-end gap-2">
-                      <button
-                        type="button"
+                    <div className="flex justify-end gap-1">
+                      <IconButton
+                        label="Edit task"
+                        icon={<PiNotePencil size={17} aria-hidden="true" />}
                         onClick={() => onEdit(task)}
-                        className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                      >
-                        Edit
-                      </button>
+                      />
 
-                      <button
-                        type="button"
+                      <IconButton
+                        label="Archive task"
+                        icon={<PiArchive size={17} aria-hidden="true" />}
+                        onClick={() => onArchive(task)}
+                      />
+
+                      <IconButton
+                        label="Move task to trash"
+                        variant="danger"
+                        icon={<PiTrash size={17} aria-hidden="true" />}
                         onClick={() => onDelete(task)}
-                        className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                      >
-                        Delete
-                      </button>
+                      />
                     </div>
                   </td>
                 </tr>

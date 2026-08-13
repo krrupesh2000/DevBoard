@@ -11,5 +11,9 @@ export function buildProject(projectData) {
     dueDate: projectData.dueDate,
     createdAt: now,
     updatedAt: now,
+
+    // Lifecycle state
+    archivedAt: null,
+    deletedAt: null,
   };
 }

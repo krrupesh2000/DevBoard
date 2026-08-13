@@ -11,10 +11,15 @@ import EditProjectDialog from "../components/projects/dialogs/EditProjectDialog"
 import DeleteProjectDialog from "../components/projects/dialogs/DeleteProjectDialog";
 
 import useAppData from "../hooks/useAppData";
-import { filterAndSortProjects } from "../utils/projectFilters";
+
+import {
+  filterAndSortProjects,
+  getActiveProjects,
+} from "../utils/projectFilters";
 
 function ProjectsPage() {
-  const { projects, tasks, updateProject, deleteProject } = useAppData();
+  const { projects, tasks, updateProject, archiveProject, deleteProject } =
+    useAppData();
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -24,8 +29,10 @@ function ProjectsPage() {
   const [editingProject, setEditingProject] = useState(null);
   const [deletingProject, setDeletingProject] = useState(null);
 
+  const activeProjects = getActiveProjects(projects);
+
   const { visibleProjects, normalizedSearch } = filterAndSortProjects({
-    projects,
+    projects: activeProjects,
     tasks,
     search,
     status,
@@ -43,6 +50,10 @@ function ProjectsPage() {
 
     updateProject(editingProject.id, projectData);
     setEditingProject(null);
+  }
+
+  function handleArchiveProject(project) {
+    archiveProject(project.id);
   }
 
   function handleDeleteProject(project) {
@@ -66,7 +77,7 @@ function ProjectsPage() {
       <div>
         <PageHeader
           title="Projects"
-          description="Manage and track your projects."
+          description="Manage and track your active projects."
         />
 
         <div className="mt-8">
@@ -93,6 +104,7 @@ function ProjectsPage() {
             hasFilters={hasFilters}
             onClearFilters={handleClearFilters}
             onEdit={handleEditProject}
+            onArchive={handleArchiveProject}
             onDelete={handleDeleteProject}
           />
         </div>

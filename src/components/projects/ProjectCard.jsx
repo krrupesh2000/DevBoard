@@ -1,13 +1,17 @@
 import { motion, useReducedMotion } from "motion/react";
+import { PiArchive, PiNotePencil, PiTrash } from "react-icons/pi";
 
 import { fadeUp } from "../../utils/motion";
+
 import Card from "../ui/Card";
+import IconButton from "../ui/IconButton";
 import PriorityIndicator from "../ui/PriorityIndicator";
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
 
-function ProjectCard({ project, progress = 0, onEdit, onDelete }) {
+function ProjectCard({ project, progress = 0, onEdit, onArchive, onDelete }) {
   const visibleTechnologies = project.technologies.slice(0, 3);
+
   const remainingTechnologies =
     project.technologies.length - visibleTechnologies.length;
 
@@ -35,21 +39,26 @@ function ProjectCard({ project, progress = 0, onEdit, onDelete }) {
           <div className="flex shrink-0 items-center gap-2">
             <StatusBadge status={project.status} />
 
-            <button
-              type="button"
-              onClick={() => onEdit(project)}
-              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              Edit
-            </button>
+            <div className="flex items-center gap-1">
+              <IconButton
+                label="Edit project"
+                icon={<PiNotePencil size={17} aria-hidden="true" />}
+                onClick={() => onEdit(project)}
+              />
 
-            <button
-              type="button"
-              onClick={() => onDelete(project)}
-              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              Delete
-            </button>
+              <IconButton
+                label="Archive project"
+                icon={<PiArchive size={17} aria-hidden="true" />}
+                onClick={() => onArchive(project)}
+              />
+
+              <IconButton
+                label="Move project to trash"
+                variant="danger"
+                icon={<PiTrash size={17} aria-hidden="true" />}
+                onClick={() => onDelete(project)}
+              />
+            </div>
           </div>
         </div>
 

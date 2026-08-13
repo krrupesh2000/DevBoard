@@ -1,5 +1,8 @@
 export function getProjectStats(projectId, tasks) {
-  const projectTasks = tasks.filter((task) => task.projectId === projectId);
+  const projectTasks = tasks.filter(
+    (task) =>
+      task.projectId === projectId && !task.archivedAt && !task.deletedAt,
+  );
 
   const totalTasks = projectTasks.length;
 

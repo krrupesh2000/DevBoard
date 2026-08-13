@@ -16,18 +16,25 @@ import PageHeader from "../components/ui/PageHeader";
 import useAppData from "../hooks/useAppData";
 
 import { staggerContainer } from "../utils/motion";
+import { getActiveProjects } from "../utils/projectFilters";
+import { getActiveTasks } from "../utils/taskFilters";
 
 function DashboardPage() {
   const { projects, tasks } = useAppData();
-  const totalProjects = projects.length;
 
-  const activeProjects = projects.filter(
+  const activeProjectsList = getActiveProjects(projects);
+
+  const activeTasksList = getActiveTasks(tasks);
+
+  const totalProjects = activeProjectsList.length;
+
+  const activeProjects = activeProjectsList.filter(
     (project) => project.status === "active",
   ).length;
 
-  const totalTasks = tasks.length;
+  const totalTasks = activeTasksList.length;
 
-  const completedTasks = tasks.filter(
+  const completedTasks = activeTasksList.filter(
     (task) => task.status === "completed",
   ).length;
 
@@ -36,7 +43,7 @@ function DashboardPage() {
       label: "Total Projects",
       value: totalProjects,
       icon: PiFolder,
-      description: "Across your workspace",
+      description: "Across your active workspace",
     },
     {
       label: "Active Projects",
@@ -48,7 +55,7 @@ function DashboardPage() {
       label: "Total Tasks",
       value: totalTasks,
       icon: PiListChecks,
-      description: "Across all projects",
+      description: "Across active projects",
     },
     {
       label: "Completed Tasks",
@@ -61,11 +68,12 @@ function DashboardPage() {
   const taskDistribution = [
     {
       name: "To Do",
-      value: tasks.filter((task) => task.status === "todo").length,
+      value: activeTasksList.filter((task) => task.status === "todo").length,
     },
     {
       name: "In Progress",
-      value: tasks.filter((task) => task.status === "in-progress").length,
+      value: activeTasksList.filter((task) => task.status === "in-progress")
+        .length,
     },
     {
       name: "Completed",
@@ -73,26 +81,27 @@ function DashboardPage() {
     },
   ];
 
-  const recentProjects = [...projects]
+  const recentProjects = [...activeProjectsList]
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     .slice(0, 4);
 
-  const upcomingTasks = [...tasks]
+  const upcomingTasks = [...activeTasksList]
     .filter((task) => task.status !== "completed")
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
     .slice(0, 5);
 
-  const projectMap = new Map(projects.map((project) => [project.id, project]));
+  const projectMap = new Map(
+    activeProjectsList.map((project) => [project.id, project]),
+  );
 
   return (
     <PageTransition>
       <div>
         <PageHeader
           title="Dashboard"
-          description="Overview of your projects, tasks, and recent development activity."
+          description="Overview of your active projects, tasks, and recent development activity."
         />
 
-        {/* Metrics */}
         <motion.section
           aria-label="Workspace metrics"
           className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
@@ -105,22 +114,23 @@ function DashboardPage() {
           ))}
         </motion.section>
 
-        {/* Charts */}
         <section
           aria-label="Project and task analytics"
           className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)]"
         >
-          <ProjectProgressChart projects={projects} tasks={tasks} />
+          <ProjectProgressChart
+            projects={activeProjectsList}
+            tasks={activeTasksList}
+          />
 
           <TaskDistributionChart data={taskDistribution} total={totalTasks} />
         </section>
 
-        {/* Summaries */}
         <section
           aria-label="Recent projects and upcoming tasks"
           className="mt-6 grid gap-6 xl:grid-cols-2"
         >
-          <RecentProjects projects={recentProjects} tasks={tasks} />
+          <RecentProjects projects={recentProjects} tasks={activeTasksList} />
 
           <UpcomingTasks tasks={upcomingTasks} projectMap={projectMap} />
         </section>
