@@ -27,7 +27,7 @@ function TaskTable({
   return (
     <Card className="overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px]">
+        <table className="w-full min-w-190">
           <thead className="border-b border-border bg-muted/30">
             <tr>
               <th
@@ -84,13 +84,13 @@ function TaskTable({
                   className="transition-colors hover:bg-muted/30"
                 >
                   <td className="px-4 py-4 lg:px-5">
-                    <p className="max-w-sm break-words text-sm font-medium">
+                    <p className="max-w-sm wrap-break-word text-sm font-medium">
                       {task.title}
                     </p>
                   </td>
 
                   <td className="px-4 py-4 lg:px-5">
-                    <span className="block max-w-[180px] truncate text-sm text-muted-foreground">
+                    <span className="block max-w-45 truncate text-sm text-muted-foreground">
                       {project?.name ?? "Unknown project"}
                     </span>
                   </td>
